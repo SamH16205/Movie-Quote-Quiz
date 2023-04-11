@@ -1,6 +1,7 @@
 var correctAnswers = ["The Godfather", "Dog Day Afternoon", "Casablanca", "Evil Dead 2", "Network", "Fantastic Mr.Fox", "Shawn of the Dead", "Tombstone", "There Will be Blood", "Apocalypse Now", "Dazed and Confused"]
 
 var questions = {
+
     Q1 : {"I'm gonna make him an offer he can't refuse.": ["The Godfather","The Good, the Bad, and the Ugly", "Miller's Crossing", "Gone With the Wind"]},
 
     Q2 : {"Attica! Attica!" : ["Fear and Loathing in Las Vegas", "Sparticus", "Dog Day Afternoon", "Mad Max"]},
@@ -22,4 +23,16 @@ var questions = {
     Q10 : {"I love the smell of napalm in the morning." : ["Apocalypse Now", "The Hurt Locker", "Oldboy", "The Thin Red Line"]},
 
     Q11 : {"Alright alright alright." : ["Fast Times at Ridgemont High", "Dazed and Confused", "Everybody Wants Some", "Boyhood"]}
+}
+
+function startTimer(){
+    // Begins that 90 second timer
+    var secondsLeft = 90
+    setInterval(function(){
+        if(secondsLeft>0){
+        secondsLeft --
+        document.getElementById("timer").textContent = "Time: " + secondsLeft
+        }
+    }
+    , 1000)
 }
