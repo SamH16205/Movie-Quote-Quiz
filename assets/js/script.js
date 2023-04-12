@@ -1,5 +1,7 @@
 var correctAnswers = ["The Godfather", "Dog Day Afternoon", "Casablanca", "Evil Dead 2", "Network", "Fantastic Mr.Fox", "Shawn of the Dead", "Tombstone", "There Will be Blood", "Apocalypse Now", "Dazed and Confused"]
-
+var score = 0
+var currentQuestion = -1
+var scoreCard = document.querySelector("p")
 var questions = [
 
     ["I'm gonna make him an offer he can't refuse.", "The Godfather","The Good, the Bad, and the Ugly", "Miller's Crossing", "Gone With the Wind"],
@@ -24,17 +26,19 @@ var questions = [
 
     ["Alright alright alright.", "Fast Times at Ridgemont High", "Dazed and Confused", "Everybody Wants Some", "Boyhood"]
 ]
-var currentQuestion = -1
+
 
 // Event listener
 var guessButtons = document.querySelectorAll(".guess-btn")
 for (var button of guessButtons) {
-    button.addEventListener("click", nextQuestion
-    )
+    button.addEventListener("click", function(){ 
+        revealAnswer()
+        setTimeout(nextQuestion, 2000)
+})
 }
 
 function startTimer(){
-    // Begins that 90 second timer
+    // Begins the 90 second timer
     var secondsLeft = 90
     setInterval(function(){
         if(secondsLeft>0){
@@ -46,6 +50,7 @@ function startTimer(){
 }
 
 function nextQuestion(){
+    resetButtons()
     currentQuestion ++
 var questionText = document.querySelector("#question")
 questionText.textContent = questions[currentQuestion][0]
@@ -57,5 +62,31 @@ var choice3 = document.querySelector("#choice-3")
 choice3.textContent = questions[currentQuestion][3]
 var choice4 = document.querySelector("#choice-4")
 choice4.textContent = questions[currentQuestion][4]
-
 }
+
+function resetButtons(){
+    // Changes the color of the buttons back to grey
+    for (const button of guessButtons) {
+        button.style.backgroundColor = "rgb(15,15,15)"
+    }
+}
+
+function referee(text){
+    // keeps and updates score
+if (correctAnswers.includes(text)){
+    score ++
+    scoreCard.text = "Current Score: " + score
+}
+}
+
+function revealAnswer(){
+    // makes the correct answer green
+    for (const button of guessButtons) {
+        if(correctAnswers.includes(button.textContent)){
+            button.style.backgroundColor = "green"
+    }else{
+        button.style.backgroundColor = "red"
+    }
+}
+}
+
