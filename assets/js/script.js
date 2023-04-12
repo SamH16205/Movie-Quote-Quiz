@@ -1,4 +1,4 @@
-var correctAnswers = ["The Godfather", "Dog Day Afternoon", "Casablanca", "Evil Dead 2", "Network", "Fantastic Mr.Fox", "Shawn of the Dead", "Tombstone", "There Will be Blood", "Apocalypse Now", "Dazed and Confused"]
+var correctAnswers = ["The Godfather", "Dog Day Afternoon", "Casablanca", "Evil Dead 2", "Network", "Fantastic Mr.Fox", "Shawn of the Dead", "Tombstone", "There Will be Blood", "Apocalypse Now", "Dazed and Confused", "The Shining"]
 var score = 0
 var currentQuestion = -1
 var scoreCard = document.querySelector("p")
@@ -24,26 +24,43 @@ var questions = [
 
     ["I love the smell of napalm in the morning.", "Apocalypse Now", "The Hurt Locker", "Oldboy", "The Thin Red Line"],
 
-    ["Alright alright alright.", "Fast Times at Ridgemont High", "Dazed and Confused", "Everybody Wants Some", "Boyhood"]
+    ["Alright alright alright.", "Fast Times at Ridgemont High", "Dazed and Confused", "Everybody Wants Some", "Boyhood"],
+
+    ["All work and no play makes Jack a dull boy.", "The Shining", "Happy Feet", "Hereditary", "Stalker"],
+
+    [" ", " ", " ", " ", " "]
+
 ]
 
 
 // Event listener
 var guessButtons = document.querySelectorAll(".guess-btn")
 for (var button of guessButtons) {
-    button.addEventListener("click", function(){ 
-        revealAnswer()
-        setTimeout(nextQuestion, 2000)
-})
+    button.addEventListener("click", function(event){ 
+        var userChoice = event.target.textContent
+        if(userChoice === "Click to begin"){
+            startTimer()
+            nextQuestion()
+        }else{
+            if(currentQuestion < 12){
+            revealAnswer()
+            referee(userChoice)
+            setTimeout(nextQuestion, 1)
+            }
+        }
+    })
 }
 
 function startTimer(){
     // Begins the 90 second timer
     var secondsLeft = 90
     setInterval(function(){
-        if(secondsLeft>0){
+        if(secondsLeft>0 && currentQuestion < 12){
         secondsLeft --
         document.getElementById("timer").textContent = "Time: " + secondsLeft
+        }else{
+            endGame()
+            
         }
     }
     , 1000)
@@ -52,17 +69,19 @@ function startTimer(){
 function nextQuestion(){
     resetButtons()
     currentQuestion ++
-var questionText = document.querySelector("#question")
-questionText.textContent = questions[currentQuestion][0]
-var choice1 = document.querySelector("#choice-1")
-choice1.textContent = questions[currentQuestion][1]
-var choice2 = document.querySelector("#choice-2")
-choice2.textContent = questions[currentQuestion][2]
-var choice3 = document.querySelector("#choice-3")
-choice3.textContent = questions[currentQuestion][3]
-var choice4 = document.querySelector("#choice-4")
-choice4.textContent = questions[currentQuestion][4]
-}
+    console.log(currentQuestion)
+    var questionText = document.querySelector("#question")
+    questionText.textContent = questions[currentQuestion][0]
+    var choice1 = document.querySelector("#choice-1")
+    choice1.textContent = questions[currentQuestion][1]
+    var choice2 = document.querySelector("#choice-2")
+    choice2.textContent = questions[currentQuestion][2]
+    var choice3 = document.querySelector("#choice-3")
+    choice3.textContent = questions[currentQuestion][3]
+    var choice4 = document.querySelector("#choice-4")
+    choice4.textContent = questions[currentQuestion][4]
+    }
+
 
 function resetButtons(){
     // Changes the color of the buttons back to grey
@@ -75,12 +94,12 @@ function referee(text){
     // keeps and updates score
 if (correctAnswers.includes(text)){
     score ++
-    scoreCard.text = "Current Score: " + score
+    scoreCard.textContent = "Current Score: " + score
 }
 }
 
 function revealAnswer(){
-    // makes the correct answer green
+    // makes the correct answer green and wrong answers red
     for (const button of guessButtons) {
         if(correctAnswers.includes(button.textContent)){
             button.style.backgroundColor = "green"
@@ -90,3 +109,12 @@ function revealAnswer(){
 }
 }
 
+function endGame(){
+    for (var button of guessButtons) {
+        button.style.backgroundColor = "#711324"
+}
+document.querySelector("#question").textContent = "Final Score: " + score
+var userName = document.createElement("input")
+document.querySelector("section").appendChild(userName)
+
+}
