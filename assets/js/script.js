@@ -2,6 +2,12 @@ var correctAnswers = ["The Godfather", "Dog Day Afternoon", "Casablanca", "Evil 
 var score = 0
 var currentQuestion = -1
 var scoreCard = document.querySelector("p")
+var highscoreText = document.querySelector("h4")
+if (localStorage.getItem('userNameAndScore') !== null){
+    var currentHighScore = JSON.parse(localStorage.getItem('userNameAndScore'))['playerScore']
+    var currentHighScoreName = JSON.parse(localStorage.getItem('userNameAndScore'))['name']
+    highscoreText.textContent = "High Score: " + currentHighScoreName + " " + currentHighScore + "pts"
+} 
 var questions = [
 
     ["I'm gonna make him an offer he can't refuse.", "The Godfather","The Good, the Bad, and the Ugly", "Miller's Crossing", "Gone With the Wind"],
@@ -32,6 +38,7 @@ var questions = [
 
 ]
 
+var secondsLeft = 90
 
 // Event listener
 var guessButtons = document.querySelectorAll(".guess-btn")
@@ -39,7 +46,7 @@ for (var button of guessButtons) {
     button.addEventListener("click", function(event){ 
         var userChoice = event.target.textContent
         if(userChoice === "Click to begin"){
-            var secondsLeft = 90
+            
             var myInt = setInterval(function(){
                 if(secondsLeft>0 && currentQuestion < 12){
                 secondsLeft --
@@ -55,15 +62,11 @@ for (var button of guessButtons) {
             if(currentQuestion < 12){
             revealAnswer()
             referee(userChoice)
-            setTimeout(nextQuestion, 1)
+            setTimeout(nextQuestion, 1500)
             }
         }
     })
 }
-
-
-    
-
 
 function nextQuestion(){
     resetButtons()
@@ -93,6 +96,8 @@ function referee(text){
 if (correctAnswers.includes(text)){
     score ++
     scoreCard.textContent = "Current Score: " + score
+}else{
+    secondsLeft = secondsLeft - 10
 }
 }
 
@@ -110,12 +115,25 @@ function revealAnswer(){
 function endGame(){
     for (var button of guessButtons) {
         button.style.backgroundColor = "#711324"
+        button.textContent = ''
 }
-document.querySelector("#question").textContent = "Final Score: " + score
-var userName = document.createElement("input")
-var nameBox = document.createElement("h2")
-nameBox.textContent = "Enter your name"
-nameBox.style.color = "wheat"
-document.querySelector("section").appendChild(nameBox)
-document.querySelector("section").appendChild(userName)
+    document.querySelector("#question").textContent = "Final Score: " + score
+    var userName = document.createElement("input")
+    var nameBox = document.createElement("h2")
+    var submitButton = document.createElement("button")
+    submitButton.textContent = "Submit"
+    nameBox.textContent = "Enter your name"
+    nameBox.style.color = "wheat"
+    document.querySelector("section").appendChild(nameBox)
+    document.querySelector("section").appendChild(userName)
+    document.querySelector("section").appendChild(submitButton)
+    submitButton.addEventListener("click", function(){
+        var userNameAndScore ={
+            name: userName.value,
+            playerScore: score
+        }
+        if(score>currentHighScore || localStorage.getItem('userNameAndScore') == null){
+        localStorage.setItem("userNameAndScore", JSON.stringify(userNameAndScore))
+        }
+    })
 }
