@@ -39,7 +39,17 @@ for (var button of guessButtons) {
     button.addEventListener("click", function(event){ 
         var userChoice = event.target.textContent
         if(userChoice === "Click to begin"){
-            startTimer()
+            var secondsLeft = 90
+            var myInt = setInterval(function(){
+                if(secondsLeft>0 && currentQuestion < 12){
+                secondsLeft --
+                document.getElementById("timer").textContent = "Time: " + secondsLeft
+                }else{
+                    clearInterval(myInt)
+                    endGame()
+                }
+            }
+            , 1000)
             nextQuestion()
         }else{
             if(currentQuestion < 12){
@@ -51,25 +61,13 @@ for (var button of guessButtons) {
     })
 }
 
-function startTimer(){
-    // Begins the 90 second timer
-    var secondsLeft = 90
-    setInterval(function(){
-        if(secondsLeft>0 && currentQuestion < 12){
-        secondsLeft --
-        document.getElementById("timer").textContent = "Time: " + secondsLeft
-        }else{
-            endGame()
-            
-        }
-    }
-    , 1000)
-}
+
+    
+
 
 function nextQuestion(){
     resetButtons()
     currentQuestion ++
-    console.log(currentQuestion)
     var questionText = document.querySelector("#question")
     questionText.textContent = questions[currentQuestion][0]
     var choice1 = document.querySelector("#choice-1")
@@ -115,6 +113,9 @@ function endGame(){
 }
 document.querySelector("#question").textContent = "Final Score: " + score
 var userName = document.createElement("input")
+var nameBox = document.createElement("h2")
+nameBox.textContent = "Enter your name"
+nameBox.style.color = "wheat"
+document.querySelector("section").appendChild(nameBox)
 document.querySelector("section").appendChild(userName)
-
 }
